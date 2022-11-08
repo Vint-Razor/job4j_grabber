@@ -66,12 +66,16 @@ public class HabrCareerParse implements Parse {
     public static void main(String[] args) {
         DateTimeParser dateTimeParser = new HabrCareerDateTimeParser();
         HabrCareerParse habrCareerParse = new HabrCareerParse(dateTimeParser);
+        System.out.println("Начало парсинга вакансий. Пожалуйста подождите...");
         List<Post> list = habrCareerParse.list(PAGE_LINK);
-        list.forEach(post -> {
-            String vacancyName = post.getTitle();
-            String link = post.getLink();
-            String date = post.getCreated().toString();
-            System.out.printf("%s %s %s%n", vacancyName, link, date);
-        });
+        System.out.printf("Окончание парсинга. Всего %d вакансий.\n", list.size());
+        Store memory = new MemStore();
+        System.out.println("Перемещение данных в базу...");
+        for (var post : list) {
+            memory.save(post);
+        }
+        System.out.println("Окончание перемещения.");
+        System.out.println("Вывод вакансии №3:");
+        System.out.println(memory.findById(2));
     }
 }

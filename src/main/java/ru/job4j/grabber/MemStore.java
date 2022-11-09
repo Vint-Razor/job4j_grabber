@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MemStore implements Store {
-
+    private int count = 0;
     private List<Post> memory = new ArrayList<>();
 
     @Override
     public void save(Post post) {
+        post.setId(++count);
         memory.add(post);
     }
 
@@ -19,6 +20,13 @@ public class MemStore implements Store {
 
     @Override
     public Post findById(int id) {
-        return memory.get(id);
+        Post rsl = null;
+        for (var post : memory) {
+            if (post.getId() == id) {
+                rsl = post;
+                break;
+            }
+        }
+        return rsl;
     }
 }

@@ -1,4 +1,4 @@
-CREATE TABLE post (
+CREATE TABLE if not exists post (
 	id serial PRIMARY KEY,
 	"name" VARCHAR(255),
 	"text" text,

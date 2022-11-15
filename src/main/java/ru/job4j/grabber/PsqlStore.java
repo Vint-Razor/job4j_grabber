@@ -35,12 +35,19 @@ public class PsqlStore implements Store, AutoCloseable {
     public void save(Post post) {
         try (PreparedStatement statement = cnn.prepareStatement(
                 "INSERT INTO post(name, text, link, created) values (?, ?, ?, ?)"
+                        + "ON CONFLICT DO NOTHING",
+                Statement.RETURN_GENERATED_KEYS
         )) {
             statement.setString(1, post.getTitle());
             statement.setString(2, post.getDescription());
             statement.setString(3, post.getLink());
             statement.setTimestamp(4, Timestamp.valueOf(post.getCreated()));
-            statement.execute();
+            statement.executeUpdate();
+            try (ResultSet generatedKey = statement.getGeneratedKeys()) {
+                if (generatedKey.next()) {
+                    post.setId(generatedKey.getInt(1));
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -113,6 +120,7 @@ public class PsqlStore implements Store, AutoCloseable {
             psqlStore.getAll().forEach(System.out::println);
             System.out.println(psqlStore.findById(1));
             System.out.println(psqlStore.findById(3));
+            System.out.println(post1.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }

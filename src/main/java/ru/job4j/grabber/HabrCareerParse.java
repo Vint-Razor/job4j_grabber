@@ -10,11 +10,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
+
 public class HabrCareerParse implements Parse {
+
     private static final String SOURCE_LINK = "http://career.habr.com";
     private static final String PAGE_LINK = String.format("%s/vacancies/java_developer", SOURCE_LINK);
     private static final int END_PAGE = 5;
     private final DateTimeParser dateTimeParser;
+    private static final Logger LOG = LogManager.getLogger(HabrCareerParse.class.getName());
 
     public HabrCareerParse(DateTimeParser dateTimeParser) {
         this.dateTimeParser = dateTimeParser;
@@ -60,6 +65,7 @@ public class HabrCareerParse implements Parse {
                 list.add(parse(row));
             }
         }
+        LOG.info("parsing completed");
         return list;
     }
 

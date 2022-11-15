@@ -6,7 +6,6 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 import static org.quartz.JobBuilder.newJob;

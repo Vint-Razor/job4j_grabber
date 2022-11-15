@@ -16,6 +16,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class Grabber implements Grab {
 
     private final Properties cfg = new Properties();
+    private static final String HABR = "http://career.habr.com/vacancies/java_developer";
 
     public Store store() {
         return new PsqlStore(cfg);
@@ -55,15 +56,11 @@ public class Grabber implements Grab {
     public static class GrabJob implements Job {
 
         @Override
-        public void execute(JobExecutionContext context) throws JobExecutionException {
+        public void execute(JobExecutionContext context) {
             JobDataMap map = context.getJobDetail().getJobDataMap();
             Store store = (Store) map.get("store");
             Parse parse = (Parse) map.get("parse");
-            String habr = "http://career.habr.com/vacancies/java_developer";
-            List<Post> posts = parse.list(habr);
-            for (Post post : posts) {
-                store.save(post);
-            }
+            parse.list(HABR).forEach(store::save);
         }
     }
 

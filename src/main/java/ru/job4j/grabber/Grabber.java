@@ -19,9 +19,10 @@ import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 public class Grabber implements Grab {
-    private final Properties cfg = new Properties();
+
     private static final String HABR = "http://career.habr.com/vacancies/java_developer";
     private static final Logger LOG = LoggerFactory.getLogger(Grabber.class.getName());
+    private final Properties cfg = new Properties();
 
     public Store store() {
         return new PsqlStore(cfg);

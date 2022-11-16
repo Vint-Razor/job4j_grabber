@@ -6,6 +6,7 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,10 +35,12 @@ public class Grabber implements Grab {
         return scheduler;
     }
 
-    public void cfg() throws IOException {
+    public void cfg() {
         try (InputStream in = Grabber.class.getClassLoader()
                 .getResourceAsStream("grabber.properties")) {
             cfg.load(in);
+        } catch (IOException e) {
+            LOG.error(String.valueOf(e));
         }
     }
 
